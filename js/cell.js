@@ -21,15 +21,21 @@ export default class Cell {
         this.father = null
     }
 
-    // drawCell dibuja el cuadrado que representa la celda en el canvas
-    drawCell(canvasContext, widht, height) {
+    /**
+     * drawCell dibuja el cuadrado que representa la celda en el canvas
+     * @param {CanvasRenderingContext2D} canvasContext
+     * @param {number} widthCell
+     * @param {number} heightCell
+     */
+    drawCell(canvasContext, widthCell, heightCell) {
         const color = this.type === 1 ? wallColor : emptyColor
         // const color = '#000000'
         canvasContext.fillStyle = color
-        canvasContext.fillRect(this.x * widht, this.y * height, widht, height)
+        canvasContext.fillRect(this.x * widthCell, this.y * heightCell, widthCell, heightCell)
     }
 
     /**
+     * addNeighbours Agrega a cada casilla sus respectivos vecinos
      * @param {Array<Cell>} sceneArray Array about grid of game
      * @param {number} nRows
      * @param {number} nColumns
@@ -55,6 +61,39 @@ export default class Cell {
             this.neighbours.push(sceneArray[this.y + 1][this.x])
         }
 
-        console.log(this.neighbours);
+        // console.log(this.neighbours);
+    }
+
+    /**
+     * drawOpenSet pinta las casillas que estan en el OpenSet
+     * @param {CanvasRenderingContext2D} canvasContext
+     * @param {number} widthCell
+     * @param {number} heightCell
+     */
+    drawOpenSet(canvasContext, widthCell, heightCell) {
+        canvasContext.fillStyle = '#2AA112'
+        canvasContext.fillRect(this.x * widthCell, this.y * heightCell, widthCell, heightCell)
+    }
+
+    /**
+     * drawCloseSet pinta las casillas que estan en el CloseSet
+     * @param {CanvasRenderingContext2D} canvasContext
+     * @param {number} widthCell
+     * @param {number} heightCell
+     */
+    drawCloseSet(canvasContext, widthCell, heightCell) {
+        canvasContext.fillStyle = '#A11712'
+        canvasContext.fillRect(this.x * widthCell, this.y * heightCell, widthCell, heightCell)
+    }
+
+    /**
+     * drawRoute pinta las casillas que conforman la ruta final
+     * @param {CanvasRenderingContext2D} canvasContext
+     * @param {number} widthCell
+     * @param {number} heightCell
+     */
+    drawRoute(canvasContext, widthCell, heightCell) {
+        canvasContext.fillStyle = '#1274A1'
+        canvasContext.fillRect(this.x * widthCell, this.y * heightCell, widthCell, heightCell)
     }
 }
