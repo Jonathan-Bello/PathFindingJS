@@ -1,3 +1,5 @@
+import * as helper from './helper.js'
+
 const wallColor = '#000000'
 const emptyColor = '#9C9090'
 
@@ -29,9 +31,15 @@ export default class Cell {
      */
     drawCell(canvasContext, widthCell, heightCell) {
         const color = this.type === 1 ? wallColor : emptyColor
-        // const color = '#000000'
+        canvasContext.beginPath()
         canvasContext.fillStyle = color
         canvasContext.fillRect(this.x * widthCell, this.y * heightCell, widthCell, heightCell)
+        canvasContext.closePath()
+
+
+        // Dibuja datos de la casilla
+        const colorT = this.type === 1 ? emptyColor : wallColor
+        this.drawCellData(canvasContext, colorT, widthCell, heightCell, this)
     }
 
     /**
@@ -73,6 +81,7 @@ export default class Cell {
     drawOpenSet(canvasContext, widthCell, heightCell) {
         canvasContext.fillStyle = '#2AA112'
         canvasContext.fillRect(this.x * widthCell, this.y * heightCell, widthCell, heightCell)
+        this.drawCellData(canvasContext, '#FFFFFF', widthCell, heightCell, this)
     }
 
     /**
@@ -84,6 +93,7 @@ export default class Cell {
     drawCloseSet(canvasContext, widthCell, heightCell) {
         canvasContext.fillStyle = '#A11712'
         canvasContext.fillRect(this.x * widthCell, this.y * heightCell, widthCell, heightCell)
+        this.drawCellData(canvasContext, '#FFFFFF', widthCell, heightCell, this)
     }
 
     /**
@@ -95,5 +105,23 @@ export default class Cell {
     drawRoute(canvasContext, widthCell, heightCell) {
         canvasContext.fillStyle = '#1274A1'
         canvasContext.fillRect(this.x * widthCell, this.y * heightCell, widthCell, heightCell)
+        this.drawCellData(canvasContext, '#FFFFFF', widthCell, heightCell, this)
+    }
+
+    /**
+     * Dibuja los datos pertenecientes a la celda
+     * @param {CanvasRenderingContext2D} canvasContext contexto del canvas 2D
+     * @param {string} colorFont color de la letra
+     * @param {number} widthCell ancho de la celda
+     * @param {number} heightCell alto de la celda
+     * @param {Cell} cell Celda de la cual colocar los datos
+     */
+    drawCellData(canvasContext, colorFont, widthCell, heightCell) {
+        canvasContext.beginPath()
+        canvasContext.fillStyle = colorFont
+        canvasContext.font = `${widthCell * 0.28}px Arial`
+        canvasContext.fillText(`(${this.x}, ${this.y})`, this.x * widthCell, this.y * heightCell + (heightCell * 0.3))
+        canvasContext.fillText(`g: ${this.g}`, this.x * widthCell, this.y * heightCell + (heightCell * 0.7))
+        canvasContext.closePath()
     }
 }

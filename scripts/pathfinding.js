@@ -1,15 +1,20 @@
 import Cell from './cell.js'
+import * as helper from "./helper.js";
 
 // Para que VSCode autocomplete con metodos de canvas
 /** @type {HTMLCanvasElement} */
 let CANVAS
 let CONTEXT
-const FPS = 200
+const FPS = 60
 
 // Table
-const nColumns = 15
-const nRows = 20
-let scene //Matriz del nivel
+const nColumns = 10
+const nRows = 10
+/**
+ * Matriz del nivel
+ * @type {Array<Array<Cell>>}
+ */
+let scene
 
 // Cell
 let cellWidth
@@ -17,10 +22,25 @@ let cellHeight
 
 //Route
 // TODO: Pasar estas variables globales dentro de una clase
+/**
+ * @type {Cell}
+ */
 let startPoint
+/**
+ * @type {Cell}
+ */
 let endPoint
+/**
+ * @type {Array<Cell>}
+ */
 let openSet = [] //Casillas disponibles para buscar camino
+/**
+ * @type {Array<Cell>}
+ */
 let closeSet = [] // Casillas ya evaluadas como no validas
+/**
+ * @type {Array<Cell>}
+ */
 let route = [] // Array de casillas que forman la ruta optima
 let finishedRoute = false
 
@@ -57,6 +77,9 @@ const drawScene = () => {
     route.forEach(element => {
         element.drawRoute(CONTEXT, cellWidth, cellHeight)
     });
+
+    // Dibuja las líneas de dibición del canvas
+    helper.drawGrid(CONTEXT, cellWidth, cellHeight, 'red', .5)
 }
 
 // crearCanvas limpia todo nuestro canvas
@@ -89,9 +112,33 @@ const heuristic = (cellA, cellB) => {
     return xDistance + yDistance
 }
 
+
+
 const pathfinding = () => {
+    console.log('Algoritmo activo');
+
+    // Verificamos que el final sea accesible
+    if (endPoint.type === 1) {
+        finishedRoute = true
+        console.log('salida es una puerta');
+    }
+
     // Continua sino se ha llegado al final
     if (finishedRoute != true) {
+
+        // TODO: Se podria hacer una función recursiva que valide si la salidad no esta bloqueda
+        // Verificamos que los vecinos del endPoint, para confirmar que el final no
+        // esta encerrado
+        let canway = false
+        endPoint.neighbours.forEach(e => {
+            if (e.type === 0) {
+                canway = true
+            }
+        })
+        if (!canway) {
+            finishedRoute = true
+        }
+
         // Seguimos mientras tengamos casillas disponibles para evaluar
         if (openSet.length > 0) {
             let indexWinner = 0 // indice de la casilla mas viable en openset
@@ -104,7 +151,6 @@ const pathfinding = () => {
             });
 
             let winnerCell = openSet[indexWinner]
-            console.log(winnerCell);
 
             // Analizamos la celda ganadora
             if (winnerCell === endPoint) { // Si es la casilla final, terminamos el algoritmo
@@ -164,8 +210,13 @@ const init = () => {
     CONTEXT = CANVAS.getContext('2d')
 
     // Definimos el tamaño de las celdas
-    cellWidth = parseInt(CANVAS.width / nColumns)
-    cellHeight = parseInt(CANVAS.height / nRows)
+    // ? Parece que no necesario el redondo, para que funcione el algoritmo
+    // ? si hay error, verificalo aquí
+    // cellWidth = parseInt(CANVAS.width / nColumns)
+    // cellHeight = parseInt(CANVAS.height / nRows)
+    cellWidth = CANVAS.width / nColumns
+    cellHeight = CANVAS.height / nRows
+
 
     // Creamos la matriz del escenario
     scene = createArrayScene(nRows, nColumns)
@@ -192,8 +243,6 @@ const init = () => {
     // Inicializamos el OpenSet
     openSet.push(startPoint)
 
-    console.log(heuristic(startPoint, endPoint));
-
     console.log('inicalizo el juego');
     // Ejecutar bucle principal
     setInterval(() => {
@@ -205,9 +254,41 @@ const init = () => {
 const main = () => {
     clearCanvas()
     drawScene()
-    pathfinding()
+    // Para que al momento de encontrar la ruta deje de ejecutar el algoritmo
+    // * evita desborde de memoria
+    if (!finishedRoute) {
+        pathfinding()
+    }
 }
+
 
 window.addEventListener('load', () => {
     init()
 })
+
+// const startA = document.getElementById('startA');
+// const escenarioRandom = document.getElementById('escenarioRandom');
+
+// escenarioRandom.addEventListener('click', () => {
+//     // Creamos la matriz del escenario
+//     scene = createArrayScene(nRows, nColumns)
+
+//     // Asignamos un objeto Cell a cada casilla del escenario
+//     for (let i = 0; i < nColumns; i++) {
+//         for (let j = 0; j < nRows; j++) {
+//             const c = new Cell(i, j);
+//             scene[j][i] = c
+//         }
+//     }
+
+//     // Asignamos los vecinos
+//     for (let i = 0; i < nColumns; i++) {
+//         for (let j = 0; j < nRows; j++) {
+//             scene[j][i].addNeighbours(scene, nRows, nColumns)
+//         }
+//     }
+// })
+
+// startA.addEventListener('click', () => {
+//     init()
+// })
