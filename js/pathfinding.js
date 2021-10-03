@@ -187,7 +187,7 @@ const init = () => {
 
     // Definimos el origen y destino
     startPoint = scene[0][0]
-    endPoint = scene[nRows - 10][nColumns - 10]
+    endPoint = scene[nRows - 1][nColumns - 1]
 
     // Inicializamos el OpenSet
     openSet.push(startPoint)
