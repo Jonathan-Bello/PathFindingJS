@@ -7,15 +7,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://unpkg.com/ed-grid@3.0.0/src/css/ed-grid.min.css" rel="stylesheet">
     <title>A estrella</title>
+
+    <style>
+        .game {
+            width: 31.25em;
+        }
+    </style>
 </head>
 
 <body>
     <main>
-        <canvas id="canvas" width="500" height="500" style="border:2px solid black"></canvas>
-        <div>
-            <button id="escenarioRandom" class="button">Escenario Random</button>
-            <button id="escenarioCristi" class="button">Escenario Cristo</button>
-            <button id="startA" class="button" >Iniciar Algoritmo</button>
+        <div class="game">
+            <canvas id="canvas" width="500" height="500" style="border:.5px solid black"></canvas>
+            <div class="ed-grid s-grid-6 s-mb-2 s-center">
+                <div class="ed-container s-x-2 s-cols-2">
+                    <label class="ed-item s-center">Columnas</label>
+                    <input id="inputColumns" class="ed-item" type="number" min="1" value="10">
+                </div>
+                <div class="ed-container  s-x-4 s-cols-2">
+                    <label class="ed-item s-center">Filas</label>
+                    <input id="inputRows" class="ed-item" type="number" min="1" value="10">
+                </div>
+            </div>
+            <div class="ed-grid s-grid-2 s-mb-2">
+                <button id="escenarioRandom" disabled>Escenario Random</button>
+                <button id="escenarioCristi">Escenario Cristo</button>
+            </div>
+            <button id="startA" class="ed-grid">Iniciar Algoritmo</button>
         </div>
     </main>
     <script type="module" src="scripts/pathfinding.js"></script>

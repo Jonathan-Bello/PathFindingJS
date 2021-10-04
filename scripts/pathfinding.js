@@ -8,8 +8,8 @@ let CONTEXT
 const FPS = 60
 
 // Table
-const nColumns = 10
-const nRows = 10
+let nColumns
+let nRows
 /**
  * Matriz del nivel
  * @type {Array<Array<Cell>>}
@@ -44,6 +44,8 @@ let closeSet = [] // Casillas ya evaluadas como no validas
 let route = [] // Array de casillas que forman la ruta optima
 let finishedRoute = false
 
+let gameStarted = false
+
 // createArrayScene crea un array de arrays, que simboliza nuestro tablero
 const createArrayScene = (nRows, nColumn) => {
     // ? si hay error, checa invertir las columnas y filas
@@ -60,6 +62,7 @@ const drawScene = () => {
     for (let i = 0; i < nColumns; i++) {
         for (let j = 0; j < nRows; j++) {
             scene[j][i].drawCell(CONTEXT, cellWidth, cellHeight)
+            // console.log(scene[j][i].x);
         }
     }
 
@@ -112,8 +115,6 @@ const heuristic = (cellA, cellB) => {
     return xDistance + yDistance
 }
 
-
-
 const pathfinding = () => {
     console.log('Algoritmo activo');
 
@@ -124,8 +125,7 @@ const pathfinding = () => {
     }
 
     // Continua sino se ha llegado al final
-    if (finishedRoute != true) {
-
+    if (!finishedRoute) {
         // TODO: Se podria hacer una función recursiva que valide si la salidad no esta bloqueda
         // Verificamos que los vecinos del endPoint, para confirmar que el final no
         // esta encerrado
@@ -149,7 +149,6 @@ const pathfinding = () => {
                     indexWinner = i
                 }
             });
-
             let winnerCell = openSet[indexWinner]
 
             // Analizamos la celda ganadora
@@ -204,50 +203,22 @@ const pathfinding = () => {
     }
 }
 
+const pantallaInicio = () => {
+    if (!gameStarted) {
+        let imgStart = new Image()
+        imgStart.src = './img/prueba.png'
+        imgStart.onload = () => {
+            CONTEXT.drawImage(imgStart, 0, 0, 500, 500)
+        }
+    }
+}
+
+
 // init es la funcion que inicializa el juego
 const init = () => {
     CANVAS = document.getElementById('canvas')
     CONTEXT = CANVAS.getContext('2d')
-
-    // Definimos el tamaño de las celdas
-    // ? Parece que no necesario el redondo, para que funcione el algoritmo
-    // ? si hay error, verificalo aquí
-    // cellWidth = parseInt(CANVAS.width / nColumns)
-    // cellHeight = parseInt(CANVAS.height / nRows)
-    cellWidth = CANVAS.width / nColumns
-    cellHeight = CANVAS.height / nRows
-
-
-    // Creamos la matriz del escenario
-    scene = createArrayScene(nRows, nColumns)
-
-    // Asignamos un objeto Cell a cada casilla del escenario
-    for (let i = 0; i < nColumns; i++) {
-        for (let j = 0; j < nRows; j++) {
-            const c = new Cell(i, j);
-            scene[j][i] = c
-        }
-    }
-
-    // Asignamos los vecinos
-    for (let i = 0; i < nColumns; i++) {
-        for (let j = 0; j < nRows; j++) {
-            scene[j][i].addNeighbours(scene, nRows, nColumns)
-        }
-    }
-
-    // Definimos el origen y destino
-    startPoint = scene[0][0]
-    endPoint = scene[nRows - 1][nColumns - 1]
-
-    // Inicializamos el OpenSet
-    openSet.push(startPoint)
-
-    console.log('inicalizo el juego');
     // Ejecutar bucle principal
-    setInterval(() => {
-        main()
-    }, 1000 / FPS)
 }
 
 // main manda a llamar las funciones activas para que funcione el juego
@@ -261,34 +232,71 @@ const main = () => {
     }
 }
 
-
 window.addEventListener('load', () => {
     init()
+    pantallaInicio()
 })
 
-// const startA = document.getElementById('startA');
-// const escenarioRandom = document.getElementById('escenarioRandom');
+const startA = document.getElementById('startA');
+const escenarioRandom = document.getElementById('escenarioRandom');
+const escenarioCristi = document.getElementById('escenarioCristi');
 
-// escenarioRandom.addEventListener('click', () => {
-//     // Creamos la matriz del escenario
-//     scene = createArrayScene(nRows, nColumns)
+startA.addEventListener('click', () => {
+    if (escenarioRandom.disabled) {
+        // Reinicio los valores para reiniciar el algoritmo
+        openSet = []
+        closeSet = []
+        route = []
+        finishedRoute = false
 
-//     // Asignamos un objeto Cell a cada casilla del escenario
-//     for (let i = 0; i < nColumns; i++) {
-//         for (let j = 0; j < nRows; j++) {
-//             const c = new Cell(i, j);
-//             scene[j][i] = c
-//         }
-//     }
+        // Definimos el tamaño de las celdas
+        nColumns = document.getElementById('inputColumns').value
+        nRows = document.getElementById('inputRows').value
+        cellWidth = CANVAS.width / nColumns
+        cellHeight = CANVAS.height / nRows
 
-//     // Asignamos los vecinos
-//     for (let i = 0; i < nColumns; i++) {
-//         for (let j = 0; j < nRows; j++) {
-//             scene[j][i].addNeighbours(scene, nRows, nColumns)
-//         }
-//     }
-// })
+        // Creamos la matriz del escenario
+        scene = createArrayScene(nRows, nColumns)
+        // Asignamos un objeto Cell a cada casilla del escenario
+        for (let i = 0; i < nColumns; i++) {
+            for (let j = 0; j < nRows; j++) {
+                const c = new Cell(i, j);
+                const typeCell = (Math.floor(Math.random() * 5)) === 1 ? 1 : 0
+                scene[j][i] = c
+                scene[j][i].type = typeCell
+            }
+        }
 
-// startA.addEventListener('click', () => {
-//     init()
-// })
+        // Asignamos los vecinos
+        for (let i = 0; i < nColumns; i++) {
+            for (let j = 0; j < nRows; j++) {
+                scene[j][i].addNeighbours(scene, nRows, nColumns)
+            }
+        }
+
+        // Definimos el origen y destino
+        startPoint = scene[0][0]
+        endPoint = scene[nRows - 1][nColumns - 1]
+
+        // Inicializamos el OpenSet
+        openSet.push(startPoint)
+
+        console.log('inicalizo el juego');
+        setInterval(() => {
+            main()
+        }, 1000 / FPS)
+    }
+})
+
+if (escenarioRandom) {
+    escenarioRandom.addEventListener('click', e => {
+        e.target.disabled = true
+        escenarioCristi.disabled = false
+    })
+}
+if (escenarioCristi) {
+    escenarioCristi.addEventListener('click', e => {
+        e.target.disabled = true
+        escenarioRandom.disabled = false
+    })
+}

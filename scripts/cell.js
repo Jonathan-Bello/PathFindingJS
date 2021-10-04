@@ -10,7 +10,7 @@ export default class Cell {
         this.y = y
         // Tipo  1 = obstaculo, vacio = 0
         // Devuelve un valor entre 0-4, asegura que la mayoria sean vacio
-        this.type = (Math.floor(Math.random() * 5)) === 1 ? 1 : 0
+        this.type = 0
 
         // Pesos
         this.f = 0 // Coste total (g+h)
