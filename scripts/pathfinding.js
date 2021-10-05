@@ -204,16 +204,18 @@ const pathfinding = () => {
     }
 }
 
-const pantallaInicio = () => {
+/**
+ * titleScreenImg muestra la imagen de pantalla de inicio
+ */
+const titleScreenImg = () => {
     if (!gameStarted) {
         let imgStart = new Image()
-        imgStart.src = './img/prueba.png'
+        imgStart.src = './img/TitleScreen.png'
         imgStart.onload = () => {
             CONTEXT.drawImage(imgStart, 0, 0, 500, 500)
         }
     }
 }
-
 
 // init es la funcion que inicializa el juego
 const init = () => {
@@ -233,9 +235,16 @@ const main = () => {
     }
 }
 
+
+/**
+ * _________________________________________
+ * Interacción con HTML
+ * _________________________________________
+ */
+
 window.addEventListener('load', () => {
     init()
-    pantallaInicio()
+    titleScreenImg()
 })
 
 const startA = document.getElementById('startA');
@@ -350,6 +359,5 @@ if (cristiScene) {
         inputColumns.disabled = true
         inputRows.disabled = true
         randomScene.disabled = false
-
     })
 }

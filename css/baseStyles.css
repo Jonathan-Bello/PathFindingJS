@@ -1,0 +1,171 @@
+*, *:before,*:after{
+  box-sizing: border-box;
+}
+
+/* ESTILOS BASE */
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - var(--header-height));
+  color: var(--color-text);
+  padding-top: var(--header-height);
+  font-family: var(--font-body);
+  font-size: var(--font-size-normal);
+  line-height: var(--body-line-height);
+  background-color: var(--color-bg-main);
+}
+
+@media screen and (max-width: 1024px) {
+  body {
+    padding-bottom: var(--header-height);
+  }
+}
+
+/* Estilos base a nuestras etiquetas HTML generales*/
+a {
+  color: var(--color-text);
+}
+
+a:hover {
+  color: var(--color-primary-light);
+  text-decoration-line: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+ul {
+  list-style-type: none;
+}
+
+p {
+  /* Para evitar el colapsado de margenes */
+  margin-top: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  /* Para evitar el colapsado de margenes */
+  margin-top: 0;
+  color: var(--color-title);
+  font-family: var(--font-title);
+  line-height: var(--title-line-height);
+  /* Para que este mas grueso que el texto normal */
+  font-weight: 800;
+}
+
+/* Definición nuestras variables del tamaño de los titulos */
+h1 {
+  font-size: var(--font-size-h1);
+}
+
+h2 {
+  font-size: var(--font-size-h2);
+}
+
+h3 {
+  font-size: var(--font-size-h3);
+}
+
+h4 {
+  font-size: var(--font-size-h4);
+}
+
+/* Para darle separación a nuestros h1 */
+.main h1 {
+  padding-top: var(--block-spacing);
+  margin-bottom: var(--block-spacing);
+}
+
+/* Para delimitar el contenido, y no toque los bordes de la pantalla */
+.content-wrapper {
+  width: calc(100% - 2rem);
+  /* Definimos el maximo del ancho */
+  max-width: var(--max-width);
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
+
+/* Content wrapper para computadora */
+@media screen and (min-width: 1024px) {
+  .content-wrapper {
+    width: 100%;
+    max-width: var(--max-width);
+    /* Para centrarlo, el margin left & right */
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+/* Ponemos la separación entre las secciones */
+.section-container {
+  margin-bottom: var(--section-spacing);
+}
+
+/* Centramos el h1 y h2 */
+.section-container h1,
+.section-container h2 {
+  text-align: center;
+}
+
+.ellipsis {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.block-ellipsis {
+  display: -webkit-box;
+  /* Numero de lineas que deseas que se visualicen */
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.block-ellipsis-2 {
+  display: -webkit-box;
+  /* Numero de lineas que deseas que se visualicen */
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.icon path[fill="black"] {
+  fill: var(--color-icon);
+}
+
+.icon-link:hover > path,
+.icon-link:hover path {
+  fill: var(--color-primary);
+}
+
+form {
+  margin-bottom: 0;
+}
+
+.divitions-line{
+  border: 1px solid var(--color-bg-light);
+  background-color: var(--color-bg-light);
+}
+/* ----- FONDO -----
+.fondo {
+  background-image: url(../svg/fondo.svg);
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-attachment: fixed;
+  background-size: cover;
+}
+
+@media screen and (min-width: 800px) {
+  .fondo {
+    background-image: url(../svg/fondo.svg);
+    background-position: center center;
+  }
+} */
