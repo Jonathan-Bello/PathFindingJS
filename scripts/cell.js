@@ -50,6 +50,7 @@ export default class Cell {
      */
     addNeighbours(sceneArray, nRows, nColumns) {
         // Verifica si es posible tener un vecino izquierdo y lo agrega
+        // vecino abajo
         if (this.x > 0) {
             this.neighbours.push(sceneArray[this.y][this.x - 1])
         }
@@ -120,7 +121,7 @@ export default class Cell {
         canvasContext.beginPath()
         canvasContext.fillStyle = colorFont
         canvasContext.font = `${widthCell * 0.28}px Arial`
-        canvasContext.fillText(`(${this.x}, ${this.y})`, this.x * widthCell, this.y * heightCell + (heightCell * 0.3))
+        canvasContext.fillText(`(${this.y}, ${this.x})`, this.x * widthCell, this.y * heightCell + (heightCell * 0.3))
         canvasContext.fillText(`g: ${this.g}`, this.x * widthCell, this.y * heightCell + (heightCell * 0.7))
         canvasContext.closePath()
     }

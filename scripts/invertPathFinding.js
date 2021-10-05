@@ -1,6 +1,5 @@
 import Cell from './cell.js'
 import * as helper from "./helper.js";
-import * as cristiMap from "./cristiMap.js"
 
 // Para que VSCode autocomplete con metodos de canvas
 /** @type {HTMLCanvasElement} */
@@ -48,11 +47,11 @@ let finishedRoute = false
 let gameStarted = false
 
 // createArrayScene crea un array de arrays, que simboliza nuestro tablero
-const createArrayScene = (nRows, nColumn) => {
+const createArrayScene = (nColumn, nRows) => {
     // ? si hay error, checa invertir las columnas y filas
-    let scene2D = new Array(nRows)
-    for (let i = 0; i < nRows; i++) {
-        scene2D[i] = new Array(nColumn)
+    let scene2D = new Array(nColumn)
+    for (let i = 0; i < nColumn; i++) {
+        scene2D[i] = new Array(nRows)
     }
     return scene2D
 }
@@ -62,7 +61,7 @@ const drawScene = () => {
     // Dibuja paredes y camino
     for (let i = 0; i < nColumns; i++) {
         for (let j = 0; j < nRows; j++) {
-            scene[j][i].drawCell(CONTEXT, cellWidth, cellHeight)
+            scene[i][j].drawCell(CONTEXT, cellWidth, cellHeight)
             // console.log(scene[j][i].x);
         }
     }
@@ -219,6 +218,9 @@ const pantallaInicio = () => {
 const init = () => {
     CANVAS = document.getElementById('canvas')
     CONTEXT = CANVAS.getContext('2d')
+    const startA = document.getElementById('startA');
+    const escenarioRandom = document.getElementById('escenarioRandom');
+    const escenarioCristi = document.getElementById('escenarioCristi');
     // Ejecutar bucle principal
 }
 
@@ -238,57 +240,8 @@ window.addEventListener('load', () => {
     pantallaInicio()
 })
 
-const startA = document.getElementById('startA');
-const randomScene = document.getElementById('randomScene');
-const cristiScene = document.getElementById('cristiScene');
-const inputColumns = document.getElementById('inputColumns')
-const inputRows = document.getElementById('inputRows')
-
 startA.addEventListener('click', () => {
-    // Reinicio los valores para reiniciar el algoritmo
-    openSet = []
-    closeSet = []
-    route = []
-    finishedRoute = false
-
-    if (randomScene.disabled) {
-        // Definimos el tamaño de las celdas
-        nColumns = inputColumns.value
-        nRows = inputRows.value
-        cellWidth = CANVAS.width / nColumns
-        cellHeight = CANVAS.height / nRows
-
-        // Creamos la matriz del escenario
-        scene = createArrayScene(nRows, nColumns)
-        // Asignamos un objeto Cell a cada casilla del escenario
-        for (let i = 0; i < nColumns; i++) {
-            for (let j = 0; j < nRows; j++) {
-                const c = new Cell(i, j);
-                const typeCell = (Math.floor(Math.random() * 5)) === 1 ? 1 : 0
-                scene[j][i] = c
-                scene[j][i].type = typeCell
-            }
-        }
-
-        // Asignamos los vecinos
-        for (let i = 0; i < nColumns; i++) {
-            for (let j = 0; j < nRows; j++) {
-                scene[j][i].addNeighbours(scene, nRows, nColumns)
-            }
-        }
-
-        // Definimos el origen y destino
-        startPoint = scene[0][0]
-        endPoint = scene[nRows - 1][nColumns - 1]
-
-        // Inicializamos el OpenSet
-        openSet.push(startPoint)
-
-        console.log('inicalizo el juego');
-        setInterval(() => {
-            main()
-        }, 1000 / FPS)
-    } else if (cristiScene.disabled) {
+    if (escenarioRandom.disabled) {
         // Reinicio los valores para reiniciar el algoritmo
         openSet = []
         closeSet = []
@@ -296,33 +249,33 @@ startA.addEventListener('click', () => {
         finishedRoute = false
 
         // Definimos el tamaño de las celdas
-        nColumns = 10
-        nRows = 11
+        nColumns = document.getElementById('inputColumns').value
+        nRows = document.getElementById('inputRows').value
         cellWidth = CANVAS.width / nColumns
         cellHeight = CANVAS.height / nRows
 
         // Creamos la matriz del escenario
-        scene = createArrayScene(nRows, nColumns)
+        scene = createArrayScene(nColumns, nRows)
         // Asignamos un objeto Cell a cada casilla del escenario
         for (let i = 0; i < nColumns; i++) {
             for (let j = 0; j < nRows; j++) {
                 const c = new Cell(i, j);
-                const typeCell = cristiMap.cristianMap[j][i]
-                scene[j][i] = c
-                scene[j][i].type = typeCell
+                const typeCell = (Math.floor(Math.random() * 5)) === 1 ? 1 : 0
+                scene[i][j] = c
+                scene[i][j].type = typeCell
             }
         }
 
         // Asignamos los vecinos
         for (let i = 0; i < nColumns; i++) {
             for (let j = 0; j < nRows; j++) {
-                scene[j][i].addNeighbours(scene, nRows, nColumns)
+                scene[i][j].addNeighbours(scene, nRows, nColumns)
             }
         }
 
         // Definimos el origen y destino
-        startPoint = scene[6][1]
-        endPoint = scene[2][nColumns - 1]
+        startPoint = scene[0][0]
+        endPoint = scene[nColumns - 1][nRows - 1]
 
         // Inicializamos el OpenSet
         openSet.push(startPoint)
@@ -331,25 +284,21 @@ startA.addEventListener('click', () => {
         setInterval(() => {
             main()
         }, 1000 / FPS)
+    } else if (escenarioCristi.disabled) {
+        alert('moDO CRISTO')
+        // todo: INVIERTE LAS COLUMNAS Y FILAS ANTES DE ESTO
     }
 })
 
-// Ejemplo del boton de random
-if (randomScene) {
-    randomScene.addEventListener('click', e => {
+if (escenarioRandom) {
+    escenarioRandom.addEventListener('click', e => {
         e.target.disabled = true
-        cristiScene.disabled = false
-        inputColumns.disabled = false
-        inputRows.disabled = false
+        escenarioCristi.disabled = false
     })
 }
-// Efectos del botón de cristi
-if (cristiScene) {
-    cristiScene.addEventListener('click', e => {
+if (escenarioCristi) {
+    escenarioCristi.addEventListener('click', e => {
         e.target.disabled = true
-        inputColumns.disabled = true
-        inputRows.disabled = true
-        randomScene.disabled = false
-
+        escenarioRandom.disabled = false
     })
 }
