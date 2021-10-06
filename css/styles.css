@@ -33,7 +33,7 @@
   width: 500px;
 }
 
-.colsRowsHub {
+.paramsHub {
   padding: 0 1rem;
 }
 
@@ -49,4 +49,8 @@ button {
 [type="number"] {
   border-radius: 1rem;
   padding: 0.2rem 1rem;
+}
+
+[type="radio"][checked="true"]{
+  background-color: red;
 }

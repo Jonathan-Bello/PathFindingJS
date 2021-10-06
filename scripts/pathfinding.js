@@ -1,6 +1,6 @@
 import Cell from './cell.js'
 import * as helper from "./helper.js";
-import * as cristiMap from "./cristiMap.js"
+import * as cristiMaps from "./cristiMap.js"
 
 // Para que VSCode autocomplete con metodos de canvas
 /** @type {HTMLCanvasElement} */
@@ -44,7 +44,6 @@ let closeSet = [] // Casillas ya evaluadas como no validas
  */
 let route = [] // Array de casillas que forman la ruta optima
 let finishedRoute = false
-
 let gameStarted = false
 
 // createArrayScene crea un array de arrays, que simboliza nuestro tablero
@@ -252,6 +251,7 @@ const randomScene = document.getElementById('randomScene');
 const cristiScene = document.getElementById('cristiScene');
 const inputColumns = document.getElementById('inputColumns')
 const inputRows = document.getElementById('inputRows')
+const radioButtons = document.querySelectorAll('[type="radio"]');
 
 startA.addEventListener('click', () => {
     // Reinicio los valores para reiniciar el algoritmo
@@ -306,9 +306,40 @@ startA.addEventListener('click', () => {
 
         // Definimos el tamaño de las celdas
         nColumns = 10
-        nRows = 11
+        nRows = 10
         cellWidth = CANVAS.width / nColumns
         cellHeight = CANVAS.height / nRows
+
+        // Obtenemos el radio button selecionado
+        const selectedMap = Array.from(radioButtons).find(radio => radio.checked === true)
+
+        let cristiScene
+        // Selecionamos el mapa a dibujar
+        switch (selectedMap.id) {
+            case 'radioScene1':
+                nRows = 11
+                cellHeight = CANVAS.height / nRows
+                cristiScene = cristiMaps.maps.map1
+                break;
+            case 'radioScene2':
+                cristiScene = cristiMaps.maps.map2
+                break;
+            case 'radioScene3':
+                cristiScene = cristiMaps.maps.map3
+                break;
+            case 'radioScene4':
+                cristiScene = cristiMaps.maps.map4
+                break;
+            case 'radioScene5':
+                cristiScene = cristiMaps.maps.map5
+                break;
+            case 'radioScene6':
+                cristiScene = cristiMaps.maps.map6
+                break;
+            default:
+                cristiScene = cristiMaps.maps.map1
+                break;
+        }
 
         // Creamos la matriz del escenario
         scene = createArrayScene(nRows, nColumns)
@@ -316,7 +347,7 @@ startA.addEventListener('click', () => {
         for (let i = 0; i < nColumns; i++) {
             for (let j = 0; j < nRows; j++) {
                 const c = new Cell(i, j);
-                const typeCell = cristiMap.cristianMap[j][i]
+                const typeCell = cristiScene.map[j][i]
                 scene[j][i] = c
                 scene[j][i].type = typeCell
             }
@@ -330,8 +361,8 @@ startA.addEventListener('click', () => {
         }
 
         // Definimos el origen y destino
-        startPoint = scene[6][1]
-        endPoint = scene[2][nColumns - 1]
+        startPoint = scene[cristiScene.startPointX][cristiScene.startPointY]
+        endPoint = scene[cristiScene.endPointX][cristiScene.endPointY]
 
         // Inicializamos el OpenSet
         openSet.push(startPoint)
@@ -350,6 +381,11 @@ if (randomScene) {
         cristiScene.disabled = false
         inputColumns.disabled = false
         inputRows.disabled = false
+
+
+        radioButtons.forEach(element => {
+            element.disabled = true
+        });
     })
 }
 // Efectos del botón de cristi
@@ -359,5 +395,9 @@ if (cristiScene) {
         inputColumns.disabled = true
         inputRows.disabled = true
         randomScene.disabled = false
+
+        radioButtons.forEach(element => {
+            element.disabled = false
+        });
     })
 }
