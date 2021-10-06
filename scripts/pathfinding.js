@@ -226,11 +226,15 @@ const init = () => {
 // main manda a llamar las funciones activas para que funcione el juego
 const main = () => {
     clearCanvas()
-    drawScene()
     // Para que al momento de encontrar la ruta deje de ejecutar el algoritmo
     // * evita desborde de memoria
     if (!finishedRoute) {
         pathfinding()
+    }
+    if (!gameStarted) {
+        titleScreenImg()
+    } else {
+        drawScene()
     }
 }
 
@@ -259,6 +263,7 @@ startA.addEventListener('click', () => {
     closeSet = []
     route = []
     finishedRoute = false
+    gameStarted = true
 
     if (randomScene.disabled) {
         // Definimos el tamaño de las celdas
@@ -399,5 +404,23 @@ if (cristiScene) {
         radioButtons.forEach(element => {
             element.disabled = false
         });
+    })
+}
+
+// Reinicia la ruta, para volver a ver el recorrido
+if (btnReset) {
+    btnReset.addEventListener('click', e => {
+        // Reinicio los valores para reiniciar el algoritmo
+        openSet = []
+        closeSet = []
+        route = []
+        finishedRoute = false
+        openSet.push(startPoint)
+    })
+}
+
+if (btnBackTitle) {
+    btnBackTitle.addEventListener('click', e => {
+        window.location.reload()
     })
 }
