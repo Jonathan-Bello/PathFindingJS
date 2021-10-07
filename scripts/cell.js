@@ -1,7 +1,5 @@
-import * as helper from './helper.js'
-
-const wallColor = '#000000'
-const emptyColor = '#9C9090'
+const wallColor = '#251C1C'
+const emptyColor = '#DADADA'
 
 export default class Cell {
     constructor(x, y) {
@@ -69,7 +67,6 @@ export default class Cell {
         if (this.y < nRows - 1) {
             this.neighbours.push(sceneArray[this.y + 1][this.x])
         }
-
         // console.log(this.neighbours);
     }
 
@@ -80,7 +77,7 @@ export default class Cell {
      * @param {number} heightCell
      */
     drawOpenSet(canvasContext, widthCell, heightCell) {
-        canvasContext.fillStyle = '#2AA112'
+        canvasContext.fillStyle = '#3D9B2A'
         canvasContext.fillRect(this.x * widthCell, this.y * heightCell, widthCell, heightCell)
         this.drawCellData(canvasContext, '#FFFFFF', widthCell, heightCell, this)
     }
@@ -92,7 +89,7 @@ export default class Cell {
      * @param {number} heightCell
      */
     drawCloseSet(canvasContext, widthCell, heightCell) {
-        canvasContext.fillStyle = '#A11712'
+        canvasContext.fillStyle = '#9E221D'
         canvasContext.fillRect(this.x * widthCell, this.y * heightCell, widthCell, heightCell)
         this.drawCellData(canvasContext, '#FFFFFF', widthCell, heightCell, this)
     }
@@ -110,6 +107,19 @@ export default class Cell {
     }
 
     /**
+     * drawCelltoColor pinta las casillas del color mandado
+     * @param {CanvasRenderingContext2D} canvasContext
+     * @param {number} widthCell
+     * @param {number} heightCell
+     * @param {string} color
+     */
+    drawCelltoColor(canvasContext, widthCell, heightCell, color) {
+        canvasContext.fillStyle = color
+        canvasContext.fillRect(this.x * widthCell, this.y * heightCell, widthCell, heightCell)
+        this.drawCellData(canvasContext, '#FFFFFF', widthCell, heightCell, this)
+    }
+
+    /**
      * Dibuja los datos pertenecientes a la celda
      * @param {CanvasRenderingContext2D} canvasContext contexto del canvas 2D
      * @param {string} colorFont color de la letra
@@ -122,7 +132,15 @@ export default class Cell {
         canvasContext.fillStyle = colorFont
         canvasContext.font = `${widthCell * 0.28}px Arial`
         canvasContext.fillText(`(${this.y}, ${this.x})`, this.x * widthCell, this.y * heightCell + (heightCell * 0.3))
-        canvasContext.fillText(`g: ${this.g}`, this.x * widthCell, this.y * heightCell + (heightCell * 0.7))
+        canvasContext.fillText(`g: ${this.g}`, this.x * widthCell, this.y * heightCell + (heightCell * 0.65))
+        canvasContext.closePath()
+    }
+
+    drawCellDataofString(canvasContext, colorFont, text, widthCell, heightCell) {
+        canvasContext.beginPath()
+        canvasContext.fillStyle = colorFont
+        canvasContext.font = `${widthCell * 0.24}px Arial`
+        canvasContext.fillText(`${text}`, this.x * widthCell, this.y * heightCell + (heightCell * 1))
         canvasContext.closePath()
     }
 }

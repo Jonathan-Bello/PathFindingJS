@@ -6,7 +6,7 @@ import * as cristiMaps from "./cristiMap.js"
 /** @type {HTMLCanvasElement} */
 let CANVAS
 let CONTEXT
-const FPS = 60
+const FPS = 30
 
 // Table
 let nColumns
@@ -81,8 +81,17 @@ const drawScene = () => {
         element.drawRoute(CONTEXT, cellWidth, cellHeight)
     });
 
-    // Dibuja las líneas de dibición del canvas
-    helper.drawGrid(CONTEXT, cellWidth, cellHeight, 'red', .5)
+    if (startPoint.type != 1 && endPoint.type != 1) {
+        // Pinta la celda inicial
+        startPoint.drawCelltoColor(CONTEXT, cellWidth, cellHeight, '#1993CC')
+        startPoint.drawCellDataofString(CONTEXT, '#0000000', 'Inicio', cellWidth, cellHeight)
+
+        // Pinta la celda final
+        endPoint.drawCelltoColor(CONTEXT, cellWidth, cellHeight, '#0E5677')
+        endPoint.drawCellDataofString(CONTEXT, '#0000000', 'Final', cellWidth, cellHeight)
+    }
+    // Dibuja las líneas de dibivsión del canvas
+    helper.drawGrid(CONTEXT, cellWidth, cellHeight, 'black', .5)
 }
 
 // crearCanvas limpia todo nuestro canvas
@@ -209,7 +218,7 @@ const pathfinding = () => {
 const titleScreenImg = () => {
     if (!gameStarted) {
         let imgStart = new Image()
-        imgStart.src = './img/TitleScreen.png'
+        imgStart.src = './img/TitleScreen2.svg'
         imgStart.onload = () => {
             CONTEXT.drawImage(imgStart, 0, 0, 500, 500)
         }
@@ -294,6 +303,9 @@ startA.addEventListener('click', () => {
         // Definimos el origen y destino
         startPoint = scene[0][0]
         endPoint = scene[nRows - 1][nColumns - 1]
+
+        startPoint.type = 0
+        endPoint.type = 0
 
         // Inicializamos el OpenSet
         openSet.push(startPoint)
