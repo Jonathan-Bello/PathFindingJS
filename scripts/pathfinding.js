@@ -136,8 +136,8 @@ const pathfinding = () => {
     // Continua sino se ha llegado al final
     if (!finishedRoute) {
         // TODO: Se podria hacer una función recursiva que valide si la salidad no esta bloqueda
-        // Verificamos que los vecinos del endPoint, para confirmar que el final no
-        // esta encerrado
+        /* Verificamos que los vecinos del endPoint, para confirmar que el final no
+            esta encerrado*/
         let canway = false
         endPoint.neighbours.forEach(e => {
             if (e.type === 0) {
@@ -174,7 +174,8 @@ const pathfinding = () => {
                     tempCell = tempCell.father
                     route.push(tempCell)
                 }
-            } else { // Sino hemos llegado al final
+            } else { 
+                // Sino hemos llegado al final
                 removeItemFromArray(openSet, winnerCell)
                 closeSet.push(winnerCell)
 
@@ -310,7 +311,7 @@ startA.addEventListener('click', () => {
         // Inicializamos el OpenSet
         openSet.push(startPoint)
 
-        console.log('inicalizo el juego');
+        console.log('inicializo el juego');
         setInterval(() => {
             main()
         }, 1000 / FPS)
@@ -384,7 +385,7 @@ startA.addEventListener('click', () => {
         // Inicializamos el OpenSet
         openSet.push(startPoint)
 
-        console.log('inicalizo el juego');
+        console.log('inicializo el juego');
         setInterval(() => {
             main()
         }, 1000 / FPS)
